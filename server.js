@@ -1,33 +1,51 @@
 'use strict';
 
 var express = require('express');
-var routes = require('./app/routes/index.js');
-var mongoose = require('mongoose');
-var passport = require('passport');
-var session = require('express-session');
-
 var app = express();
-require('dotenv').load();
-require('./app/config/passport')(passport);
+var path = require("path");
+var sugar = require("sugar");
 
-mongoose.connect(process.env.MONGO_URI);
+app.use(express.static('public'));
 
-app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
-app.use('/public', express.static(process.cwd() + '/public'));
-app.use('/common', express.static(process.cwd() + '/app/common'));
 
-app.use(session({
-	secret: 'secretClementine',
-	resave: false,
-	saveUninitialized: true
-}));
+app.get('/', function (req, res) {
+	
+  res.sendFile('public/index.html', {root: __dirname });
+  
+  
+});
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.get('/:date', function(req, res){
+	var obj = {
+		"unix": 0,
+		"natural": ""
+	};
+	
+	if(isNaN(Number(req.params.date))){
+		//res.send(Date.create(req.params.date).format('{Month} {dd}, {yyyy}'));
+	
+		if(Date.create(req.params.date).isValid()){
+			
+			obj.unix = Date.parse(Date.create(req.params.date))/1000;
+			obj.natural = Date.create(req.params.date).format('{Month} {dd}, {yyyy}');
+			res.send(JSON.stringify(obj));
+		}
+		else{
+			obj.unix = null;
+			obj.natural = null;
+			res.send(JSON.stringify(obj));
+		}
+	}
+	else if(Date.create(Number(req.params.date)).isValid()){
+		obj.unix = Number(req.params.date);
+		obj.natural = Date.create(Number(req.params.date)*1000).format('{Month} {dd}, {yyyy}');
+		res.send(JSON.stringify(obj));
+	}
+});
 
-routes(app, passport);
 
-var port = process.env.PORT || 8080;
+
+var port = 8080;
 app.listen(port,  function () {
 	console.log('Node.js listening on port ' + port + '...');
 });

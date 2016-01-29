@@ -5,35 +5,26 @@
 	<head>
 		<title>Clementine.js - The elegant and lightweight full stack JavaScript boilerplate.</title>
 		
-		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" type="text/css" href="/css/main.css">
 	</head>
-
-	<header>
-		<p>Welcome, <span id="display-name"></span>!</p>
-		<a class="menu" href="/profile">Profile</a>
-		<p>|</p>
-		<a class="menu" href="/logout">Logout</a>
-	</header>
-
 	<body>
-		<div class="container">
-			<img src="/public/img/clementine_150.png" />
-			<br />
-			<p class="clementine-text">Clementine.js</p>
+		<h1 id="title">API Basejump: Timestamp microservice</h1>
+		<br>
+		<div id="content">
+			<p>User stories:</p>
+			<ol>
+  				<li>I can pass a string as a parameter, and it will check to see whether that string contains either a unix timestamp or a natural language date. (example: January 1, 2016)</li>
+	  			<li>If it does, it returns both the Unix timestamp and the natural language form of that date.</li>
+	 		 	<li>If it does not contain a date or Unix timestamp, it returns null for those properties.</li>
+			</ol>
+
 		</div>
-	
-		<div class="container">
-			<p>You have clicked the button <span id="click-nbr"></span> times.</p>
-			<br />
-			<div class="btn-container">
-				<button type="submit" class="btn btn-add">CLICK ME!</button>
-				<button class="btn btn-delete">RESET</button>
-			</div>
-		</div>
-		
-		<script type="text/javascript" src="common/ajax-functions.js"></script>
-		<script type="text/javascript" src="controllers/clickController.client.js"></script>
-		<script type="text/javascript" src="controllers/userController.client.js"></script>
+		<h2>Example usage:</h2>
+		<p id="blah">https://timestamp-ms.herokuapp.com/December%2015,%202015</p>
+		<p id="blah">https://timestamp-ms.herokuapp.com/1450137600</p>
+		<h2>Example output:</h2>
+		<p id="blah">{ "unix": 1450137600, "natural": "December 15, 2015" }</p>
 	</body>
+
 
 </html>
