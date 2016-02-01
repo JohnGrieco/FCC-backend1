@@ -5,6 +5,8 @@ var app = express();
 var path = require("path");
 var sugar = require("sugar");
 var favicon = require("serve-favicon");
+var uaParser = require("ua-parser-js");
+var useragent = require("useragent");
 
 app.use(express.static('public'));
 app.use(favicon(__dirname + '/favicon.ico'));
@@ -44,7 +46,21 @@ app.get('/:date', function(req, res){
 	}
 });
 
+var obj = {
+	"ip-address": "",
+	"language": "",
+	"OS": ""
+};
 
+app.get('/info', function(req, res){
+	var agent = useragent.parse(req.headers['user-agent']);
+	
+	obj['ip-address'] = uaParser(req.headers)['ua']["x-forwarded-for"];
+	obj['language'] = uaParser(req.headers)['ua']['accept-language'];
+	obj['OS'] = agent.os.toString();
+	
+	res.send(JSON.stringify(obj));
+});
 
 var port = process.env.PORT || 5000;
 app.listen(port,  function () {
