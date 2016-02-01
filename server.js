@@ -18,6 +18,22 @@ app.get('/', function (req, res) {
   
 });
 
+var obj = {
+	"ip-address": "",
+	"language": "",
+	"OS": ""
+};
+
+app.get('/info', function(req, res){
+	var agent = useragent.parse(req.headers['user-agent']);
+	
+	obj['ip-address'] = uaParser(req.headers)['ua']["x-forwarded-for"];
+	obj['language'] = uaParser(req.headers)['ua']['accept-language'];
+	obj['OS'] = agent.os.toString();
+	
+	res.send(JSON.stringify(obj));
+});
+
 app.get('/:date', function(req, res){
 	var obj = {
 		"unix": 0,
@@ -46,21 +62,6 @@ app.get('/:date', function(req, res){
 	}
 });
 
-var obj = {
-	"ip-address": "",
-	"language": "",
-	"OS": ""
-};
-
-app.get('/info', function(req, res){
-	var agent = useragent.parse(req.headers['user-agent']);
-	
-	obj['ip-address'] = uaParser(req.headers)['ua']["x-forwarded-for"];
-	obj['language'] = uaParser(req.headers)['ua']['accept-language'];
-	obj['OS'] = agent.os.toString();
-	
-	res.send(JSON.stringify(obj));
-});
 
 var port = process.env.PORT || 5000;
 app.listen(port,  function () {
